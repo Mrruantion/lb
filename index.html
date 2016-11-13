@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin: 0;padding: 0;list-style: none;border:0;}
+		.all{
+			  width:500px;
+			  height:200px;
+			  padding:7px;
+			  border:1px solid #ccc;
+			  margin:100px auto;
+			  position:relative;
+		}
+		.screen{
+			width:500px;
+			height:200px;
+			 overflow:hidden; 
+			position:relative;
+		}
+
+		.screen li{ 
+			width:500px; 
+			height:200px; 
+			overflow:hidden; 
+			float:left;
+		}
+		.screen ul{ 
+			position:absolute; 
+			left:0; 
+			top:0px; 
+			width:3000px;
+		}
+		.all ol{ 
+			position:absolute; 
+			right:10px; 
+			bottom:10px; 
+			line-height:20px; 
+			text-align:center;
+		}
+		.all ol li{ 
+			float:left; 
+			width:20px; 
+			height:20px; 
+			background:#fff; 
+			border:1px solid #ccc; 
+			margin-left:10px; 
+			cursor:pointer;
+		}
+		.all ol li.current { 
+			background:yellow;
+		}
+	</style>
+	<script>
+		function animate(obj,target){
+			clearInterval(obj.timer);
+			var speed = obj.offsetLeft < target ? 15 : -15;
+			obj.timer = setInterval(function(){
+				var result = obj.offsetLeft - target;
+				obj.style.left = obj.offsetLeft + speed +"px";
+				if(Math.abs(result) <= 15){
+					clearInterval(obj.timer);
+					obj.style.left = target +"px";
+				}
+			},10)
+		}
+		window.onload = function(){
+			var all = document.getElementById("all");
+			var ul = document.getElementById("ul");
+			var ullis = ul.children;
+			ul.appendChild(ul.children[0].cloneNode(true));
+
+			var ol = document.createElement("ol");
+			// var li = document.createElement("li");
+			all.appendChild(ol);
+			for(var i=0;i<ullis.length-1;i++){
+				// lis[i].index = i;
+				var li = document.createElement("li");
+				li.innerHTML = i + 1;
+				ol.appendChild(li);
+			}
+			ol.children[0].className = "current";
+
+
+			var ollis = ol.children;
+			for(var i =0;i<ollis.length;i++){
+				ollis[i].index = i;
+				ollis[i].onmouseover = function(){
+					for(var j = 0;j<ollis.length;j++){
+						ollis[j].className = "";
+					}
+					this.className = "current";
+					animate(ul,-this.index*500);
+					square = key = this.index;
+				}
+			}
+
+			var timer = null;
+			var key = 0;
+			var square = 0;
+			timer = setInterval(autoplay,1000)
+			function autoplay(){
+				key++;
+				if(key>ullis.length - 1){
+					ul.style.left = 0;
+					key = 1;
+				}
+				animate(ul,-key*500);
+				square++;
+				if(square > ollis.length - 1){
+					square = 0;
+				}
+				for(var i=0; i<ollis.length;i++){
+					ollis[i].className = "";
+				}
+				ollis[square].className = "current";
+			}
+			all.onmouseover = function(){
+				clearInterval(timer);
+			}
+			all.onmouseout = function(){
+				timer = setInterval(autoplay,1000)
+			}
+
+		}
+
+	
+	</script>
+</head>
+<body>
+<div class="all" id='all'>
+	<div class="screen">
+        <ul id="ul">
+            <li><img src="images/taobao/1.jpg" /></li>
+            <li><img src="images/taobao/2.jpg" /></li>
+            <li><img src="images/taobao/3.jpg" /></li>
+            <li><img src="images/taobao/4.jpg" /></li>
+            <li><img src="images/taobao/5.jpg" /></li>
+        </ul>
+ 	</div>
+ </div>
+</body>
+</html>
